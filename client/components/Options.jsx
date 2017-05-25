@@ -1,16 +1,20 @@
 import React from 'react'
 
 export const Options = function (props) {
-
-  function authorOptions (arr) {
-    return arr.map((author, key) => {
-      return (<button key={key}>{author}</button>)
-    })
-  }
-
   return (
     <div className='nextButton'>
       {authorOptions(props.authors)}
     </div>
   )
+}
+
+function authorOptions (arr) {
+  const randomArr = []
+  while (arr.length > 0) {
+    randomArr.push(arr.splice(Math.floor(Math.random() * arr.length), 1)[0])
+  }
+
+  return randomArr.map((author, key) => {
+    return (<button key={key}>{author}</button>)
+  })
 }

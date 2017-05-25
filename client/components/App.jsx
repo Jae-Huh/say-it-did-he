@@ -1,5 +1,4 @@
 import React from 'react'
-// import {HashRouter as Router, Route} from 'react-router-dom'
 
 import {Quote} from './Quote'
 import {NextButton} from './NextButton'
@@ -23,19 +22,21 @@ export class App extends React.Component {
     this.setState({
       loading: true
     })
-    getQuote((err, result) => {
+    getQuote((err, results) => {
       if (err) {
-        return console.Error(err)
+        return console.error(err)
       }
-      getYoda(result.quote, (err, yodafiedQuote) => {
+      console.log(results)
+      getYoda(results[0].quote, (err, yodafiedQuote) => {
         if (err) {
-          return console.Error(err)
+          return console.error(err)
         }
         this.setState({
           quote: yodafiedQuote,
-          author: result.author,
+          author: results[0].author,
+          authors: results.map(quote => quote.author),
           loading: false,
-          originalQuote: result.quote
+          originalQuote: results[0].quote
         })
       })
     })
