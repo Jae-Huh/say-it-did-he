@@ -36,7 +36,11 @@ export class Main extends React.Component {
         numQuestion: this.state.numQuestion += 1,
         waiting: false,
         answered: false
-      }, this.getQuotes)
+      }, () => {
+        if (this.state.numQuestion !== 4) {
+          this.getQuotes()
+        }
+      })
     } else {
       this.setState({
         finished: true
@@ -98,10 +102,11 @@ export class Main extends React.Component {
         {this.state.firstQuestionLoaded && !this.state.finished && <Quote quote={this.state.quotes[this.state.numQuestion]} />}
         {this.state.firstQuestionLoaded && !this.state.finished && <Options authors={this.state.authors[this.state.numQuestion]} buttonClick={this.chooseAuthor.bind(this)} answered={this.state.answered} />}
         {this.state.answered && !this.state.loading && !this.state.finished && <NextButton buttonClick={this.nextQuote.bind(this)} questionNum={this.state.questionNum} />}
-        {!this.state.finished && <Score correctCount={this.state.correctCount} numQuestion={this.state.answers.length} />}
         {this.state.loading && !this.state.finished && <Loading />}
         {this.state.finished && <Final correctCount={this.state.correctCount} numQuestion={this.state.answers.length} />}
       </div>
     )
   }
 }
+
+// {!this.state.finished && <Score correctCount={this.state.correctCount} numQuestion={this.state.answers.length} />}
