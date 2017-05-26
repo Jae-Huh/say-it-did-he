@@ -8,11 +8,6 @@ import getQuote from '../client/api/getQuote.js'
 import { getYoda } from '../client/api/yodaAPI.js'
 
 /* ############## Paul's testing starts here ################# */
-test('Checks if title is in place', t => {
-  const wrapper = shallow(<App />)
-  t.is(wrapper.find('h1').text(), 'Say it, did he?')
-  t.end()
-})
 
 test('getQuote returns an object', function (t) {
   getQuote((err, result) => {
