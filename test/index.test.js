@@ -14,14 +14,15 @@ test('<App />', t => {
   t.end()
 })
 
-
-test("test getYoda function", function (t) {
+// ############ Robs Tests Start here ############################
+test("test getYoda function returns a string", function (t) {
   // Arrange
   // Act
   getYoda('It was the best of times.', (err,result) => {
-        
     // Assert
     t.is(typeof result, 'string')
     t.end()
   })
 })
+
+// ######### Robs tests end here #########################
