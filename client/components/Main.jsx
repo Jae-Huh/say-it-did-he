@@ -51,13 +51,15 @@ export class Main extends React.Component {
     getQuote((err, results) => {
       if (err) {
         console.error(err)
-        return getQuotes()
+        setTimeout(this.getQuotes.bind(this), 3000)
+        return
       }
       console.log(results)
       getYoda(results[0].quote, (err, yodafiedQuote) => {
         if (err) {
           console.error(err)
-          return getQuotes()
+          setTimeout(this.getQuotes.bind(this), 3000)
+          return
         }
         console.log(yodafiedQuote)
         console.log([results.map(quote => quote.author)])
@@ -95,7 +97,7 @@ export class Main extends React.Component {
         <h1>Say it, did he?</h1>
         {this.state.firstQuestionLoaded && !this.state.finished && <Quote quote={this.state.quotes[this.state.numQuestion]} />}
         {this.state.firstQuestionLoaded && !this.state.finished && <Options authors={this.state.authors[this.state.numQuestion]} buttonClick={this.chooseAuthor.bind(this)} answered={this.state.answered} />}
-        {this.state.answered && !this.state.loading && !this.state.finished && <NextButton buttonClick={this.nextQuote.bind(this)} />}
+        {this.state.answered && !this.state.loading && !this.state.finished && <NextButton buttonClick={this.nextQuote.bind(this)} questionNum={this.state.questionNum} />}
         {!this.state.finished && <Score correctCount={this.state.correctCount} numQuestion={this.state.answers.length} />}
         {this.state.loading && !this.state.finished && <Loading />}
         {this.state.finished && <Final correctCount={this.state.correctCount} numQuestion={this.state.answers.length} />}
