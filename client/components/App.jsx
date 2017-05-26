@@ -42,12 +42,14 @@ export class App extends React.Component {
     })
     getQuote((err, results) => {
       if (err) {
-        return console.error(err)
+        console.error(err)
+        return getQuotes()
       }
       console.log(results)
       getYoda(results[0].quote, (err, yodafiedQuote) => {
         if (err) {
-          return console.error(err)
+          console.error(err)
+          return getQuotes()
         }
         console.log(yodafiedQuote)
         console.log([results.map(quote => quote.author)])
