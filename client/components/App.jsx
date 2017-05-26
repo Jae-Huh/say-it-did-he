@@ -6,15 +6,18 @@ import {Options} from './Options'
 import getQuote from '../api/getQuote'
 import {getYoda} from '../api/yodaAPI'
 import {Loading} from './Loading'
+import {Score} from './Score'
 
 export class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      quote: 'this is a quote',
+      quote: ['this is a quote'],
       authors: ['author1', 'author2', 'author3'],
       loading: false,
-      originalQuote: 'original'
+      originalQuote: 'original',
+      numQuestion: 0,
+      correctCount: 0
     }
   }
 
@@ -47,9 +50,11 @@ export class App extends React.Component {
     })
   }
 
-  chooseAuthor () {
+  chooseAuthor (result) {
     this.setState({
-      answered: true
+      answered: true,
+      numQuestion: this.state.numQuestion += 1,
+      correctCount: this.state.correctCount += result
     })
   }
 
@@ -61,6 +66,7 @@ export class App extends React.Component {
         {!this.state.loading && <Quote quote={this.state.quote} />}
         {!this.state.loading && <Options authors={this.state.authors} buttonClick={this.chooseAuthor.bind(this)} answered={this.state.answered} />}
         {this.state.answered && <NextButton buttonClick={this.nextQuote.bind(this)} />}
+        <Score correctCount={this.state.correctCount} numQuestion={this.state.numQuestion}/>
       </div>
     )
   }

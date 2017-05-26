@@ -7,7 +7,7 @@ export class Options extends React.Component {
     this.state = {
       authors: props.authors,
       randomArr: this.authorOptions(props.authors),
-      buttons: ['', '', '', '']
+      buttons: ['', '', '', ''],
     }
     this.chooseOption = this.chooseOption.bind(this)
   }
@@ -25,6 +25,7 @@ export class Options extends React.Component {
 
   chooseOption (key) {
     if (!this.props.answered) {
+      let result = 0
       let buttonArr = this.state.randomArr.map(author => {
         if (author === this.state.authors[0]) {
           return 'answer'
@@ -34,13 +35,14 @@ export class Options extends React.Component {
 
       if (this.state.randomArr[key] === this.state.authors[0]) {
         buttonArr[key] = 'correct'
+        result = 1
       } else {
         buttonArr[key] = 'incorrect'
       }
       this.setState({
         buttons: buttonArr
       })
-      this.props.buttonClick()
+      this.props.buttonClick(result)
     }
   }
 
