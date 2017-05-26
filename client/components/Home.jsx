@@ -5,6 +5,7 @@ export const Home = function (props) {
   return (
     <div>
       <div className='immovable'>
+        {/* <div className="fade"></div> */}
         <section className='star-wars'>
           <div className='crawl'>
             <div className='title'>
@@ -17,7 +18,9 @@ export const Home = function (props) {
           </div>
         </section>
       </div>
-    <Link to='/game'>Start</Link>
-  </div>
+      <div className='startbutton'>
+        <Link to='/game'><button>Start</button></Link>
+      </div>
+    </div>
   )
 }
