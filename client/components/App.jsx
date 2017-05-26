@@ -19,6 +19,10 @@ export class App extends React.Component {
   }
 
   componentDidMount () {
+    this.nextQuote.bind(this)()
+  }
+
+  nextQuote () {
     this.setState({
       loading: true
     })
@@ -36,15 +40,16 @@ export class App extends React.Component {
           author: results[0].author,
           authors: results.map(quote => quote.author),
           loading: false,
-          originalQuote: results[0].quote
+          originalQuote: results[0].quote,
+          answered: false
         })
       })
     })
   }
 
-  nextQuote () {
+  chooseAuthor () {
     this.setState({
-      quote: 'this is another quote'
+      answered: true
     })
   }
 
@@ -54,8 +59,8 @@ export class App extends React.Component {
         <h1>Say it, did he?</h1>
         {this.state.loading && <Loading />}
         {!this.state.loading && <Quote quote={this.state.quote} />}
-        <NextButton buttonClick={this.nextQuote.bind(this)} />
-        <Options authors={this.state.authors} />
+        {!this.state.loading && <Options authors={this.state.authors} buttonClick={this.chooseAuthor.bind(this)} answered={this.state.answered} />}
+        {this.state.answered && <NextButton buttonClick={this.nextQuote.bind(this)} />}
       </div>
     )
   }

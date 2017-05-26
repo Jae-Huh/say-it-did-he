@@ -1,0 +1,11 @@
+.incorrect {
+  background-color: red;
+}
+
+.answer {
+  background-color: yellow;
+}
+
+.correct {
+  background-color: green;
+}
