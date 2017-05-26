@@ -3,6 +3,32 @@ import React from 'react'
 import { shallow } from 'enzyme'
 import request from 'superagent'
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ############## Paul's testing starts here ################# */
 import { App } from '../client/components/App.jsx'
 import getQuote from '../client/api/getQuote.js'
