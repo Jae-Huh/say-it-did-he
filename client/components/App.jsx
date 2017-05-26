@@ -12,20 +12,31 @@ export class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      quote: 'this is a quote',
-      authors: ['author1', 'author2', 'author3'],
-      loading: false,
-      originalQuote: 'original',
+      quotes: [],
+      authors: [],
+      loading: true,
+      originalQuotes: [],
+      answers: [],
       numQuestion: 0,
-      correctCount: 0
+      correctCount: 0,
+      waiting: false,
+      firstQuestionLoaded: false
     }
   }
 
   componentDidMount () {
-    this.nextQuote.bind(this)()
+    this.getQuotes.bind(this)()
   }
 
   nextQuote () {
+      this.setState({
+        numQuestion: this.state.numQuestion += 1,
+        waiting: false,
+        answered: false
+      }, this.getQuotes)
+  }
+
+  getQuotes () {
     this.setState({
       loading: true
     })
@@ -38,23 +49,33 @@ export class App extends React.Component {
         if (err) {
           return console.error(err)
         }
+        console.log(yodafiedQuote)
+        console.log([results.map(quote => quote.author)])
         this.setState({
-          quote: yodafiedQuote,
-          author: results[0].author,
-          authors: results.map(quote => quote.author),
+          authors: this.state.authors.concat([results.map(quote => quote.author)]),
+          quotes: this.state.quotes.concat([yodafiedQuote]),
           loading: false,
-          originalQuote: results[0].quote,
-          answered: false
+          originalQuotes: this.state.quotes.concat([results[0].quote]),
+          firstQuestionLoaded: true
+        }, () => {
+          if (this.state.numQuestion === this.state.quotes.length - 1) {
+            this.getQuotes()
+          }
         })
       })
     })
   }
 
-  chooseAuthor (result) {
+  chooseAuthor (answer) {
+    console.log(answer)
+    let result = 0
+    if (answer === this.state.authors[this.state.numQuestion][0]) {
+      result += 1
+    }
     this.setState({
       answered: true,
-      numQuestion: this.state.numQuestion += 1,
-      correctCount: this.state.correctCount += result
+      correctCount: this.state.correctCount += result,
+      answers: this.state.answers.concat([answer])
     })
   }
 
@@ -62,11 +83,11 @@ export class App extends React.Component {
     return (
       <div className='main'>
         <h1>Say it, did he?</h1>
+        {this.state.firstQuestionLoaded && <Quote quote={this.state.quotes[this.state.numQuestion]} />}
+        {this.state.firstQuestionLoaded && <Options authors={this.state.authors[this.state.numQuestion]} buttonClick={this.chooseAuthor.bind(this)} answered={this.state.answered} />}
+        {this.state.answered && !this.state.loading && <NextButton buttonClick={this.nextQuote.bind(this)} />}
+        <Score correctCount={this.state.correctCount} numQuestion={this.state.answers.length} />
         {this.state.loading && <Loading />}
-        {!this.state.loading && <Quote quote={this.state.quote} />}
-        {!this.state.loading && <Options authors={this.state.authors} buttonClick={this.chooseAuthor.bind(this)} answered={this.state.answered} />}
-        {this.state.answered && <NextButton buttonClick={this.nextQuote.bind(this)} />}
-        <Score correctCount={this.state.correctCount} numQuestion={this.state.numQuestion}/>
       </div>
     )
   }

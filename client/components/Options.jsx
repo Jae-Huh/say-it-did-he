@@ -3,13 +3,29 @@ import React from 'react'
 export class Options extends React.Component {
   constructor (props) {
     super(props)
-    console.log('loading')
+    console.log('props', this.props)
     this.state = {
       authors: props.authors,
       randomArr: this.authorOptions(props.authors),
-      buttons: ['', '', '', ''],
+      buttons: ['', '', '', '']
     }
     this.chooseOption = this.chooseOption.bind(this)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    let foundDifference = false
+    for (let i = 0; i < nextProps.authors.length; i++) {
+      if (nextProps.authors[i] !== this.state.authors[i]) {
+        foundDifference = true
+      }
+    }
+    if (foundDifference === true) {
+      this.state = {
+        authors: nextProps.authors,
+        randomArr: this.authorOptions(nextProps.authors),
+        buttons: ['', '', '', '']
+      }
+    }
   }
 
   authorOptions (arr) {
@@ -25,7 +41,6 @@ export class Options extends React.Component {
 
   chooseOption (key) {
     if (!this.props.answered) {
-      let result = 0
       let buttonArr = this.state.randomArr.map(author => {
         if (author === this.state.authors[0]) {
           return 'answer'
@@ -35,14 +50,13 @@ export class Options extends React.Component {
 
       if (this.state.randomArr[key] === this.state.authors[0]) {
         buttonArr[key] = 'correct'
-        result = 1
       } else {
         buttonArr[key] = 'incorrect'
       }
       this.setState({
         buttons: buttonArr
       })
-      this.props.buttonClick(result)
+      this.props.buttonClick(this.state.randomArr[key])
     }
   }
 

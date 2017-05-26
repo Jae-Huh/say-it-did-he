@@ -9,7 +9,7 @@ export const Loading = function (props) {
 
   return (
     <div className='nextButton'>
-      <p>Loading...</p>
+      <p>Loading next question...</p>
       <img src={getYoda()} />
     </div>
   )
