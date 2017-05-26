@@ -12,7 +12,7 @@ export class App extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      quote: ['this is a quote'],
+      quote: 'this is a quote',
       authors: ['author1', 'author2', 'author3'],
       loading: false,
       originalQuote: 'original',
