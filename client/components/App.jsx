@@ -1,5 +1,4 @@
 import React from 'react'
-// import {HashRouter as Router, Route} from 'react-router-dom'
 
 import {Quote} from './Quote'
 import {NextButton} from './NextButton'
@@ -7,6 +6,7 @@ import {Options} from './Options'
 import getQuote from '../api/getQuote'
 import {getYoda} from '../api/yodaAPI'
 import {Loading} from './Loading'
+import {Score} from './Score'
 
 export class App extends React.Component {
   constructor (props) {
@@ -15,35 +15,46 @@ export class App extends React.Component {
       quote: 'this is a quote',
       authors: ['author1', 'author2', 'author3'],
       loading: false,
-      originalQuote: 'original'
+      originalQuote: 'original',
+      numQuestion: 0,
+      correctCount: 0
     }
   }
 
   componentDidMount () {
+    this.nextQuote.bind(this)()
+  }
+
+  nextQuote () {
     this.setState({
       loading: true
     })
-    getQuote((err, result) => {
+    getQuote((err, results) => {
       if (err) {
-        return console.Error(err)
+        return console.error(err)
       }
-      getYoda(result.quote, (err, yodafiedQuote) => {
+      console.log(results)
+      getYoda(results[0].quote, (err, yodafiedQuote) => {
         if (err) {
-          return console.Error(err)
+          return console.error(err)
         }
         this.setState({
           quote: yodafiedQuote,
-          author: result.author,
+          author: results[0].author,
+          authors: results.map(quote => quote.author),
           loading: false,
-          originalQuote: result.quote
+          originalQuote: results[0].quote,
+          answered: false
         })
       })
     })
   }
 
-  nextQuote () {
+  chooseAuthor (result) {
     this.setState({
-      quote: 'this is another quote'
+      answered: true,
+      numQuestion: this.state.numQuestion += 1,
+      correctCount: this.state.correctCount += result
     })
   }
 
@@ -53,8 +64,9 @@ export class App extends React.Component {
         <h1>Say it, did he?</h1>
         {this.state.loading && <Loading />}
         {!this.state.loading && <Quote quote={this.state.quote} />}
-        <NextButton buttonClick={this.nextQuote.bind(this)} />
-        <Options authors={this.state.authors} />
+        {!this.state.loading && <Options authors={this.state.authors} buttonClick={this.chooseAuthor.bind(this)} answered={this.state.answered} />}
+        {this.state.answered && <NextButton buttonClick={this.nextQuote.bind(this)} />}
+        <Score correctCount={this.state.correctCount} numQuestion={this.state.numQuestion}/>
       </div>
     )
   }
